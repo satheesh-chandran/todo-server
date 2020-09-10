@@ -44,4 +44,10 @@ const getHeading = function (client) {
   });
 };
 
-module.exports = { getId, getAllTasks, getTask, getHeading };
+const setHeading = function (client, heading) {
+  return new Promise((resolve, reject) => {
+    client.set('heading', heading, () => resolve({ status: true }));
+  });
+};
+
+module.exports = { getId, getAllTasks, getTask, getHeading, setHeading };

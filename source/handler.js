@@ -1,6 +1,12 @@
-const redis = require('redis');
-const client = redis.createClient({ db: 1 });
-const { getId, getAllTasks, getTask, getHeading } = require('./dataStore');
+const {
+  getId,
+  getAllTasks,
+  getTask,
+  getHeading,
+  setHeading
+} = require('./dataStore');
+const { client } = require('./client');
+
 const DEFAULT = 'TODO';
 const statusCounts = 3;
 
@@ -29,20 +35,15 @@ const changeStatus = (req, res) => {
 
 const clearItems = (req, res) => client.del('tasks', () => res.send('OK'));
 
-const serveTodoItems = (req, res) =>
-  getAllTasks(client).then(data => res.json(data));
+const deleteItem = (req, res) => client.hdel('tasks', `${req.body.id}`, () => res.send('OK'));
 
-const serveHeading = (req, res) =>
-  getHeading(client).then(data => res.json(data));
+const serveTodoItems = (req, res) => getAllTasks(client).then(items => res.json(items));
 
-const resetHeading = (req, res) =>
-  client.set('heading', DEFAULT, () => res.send('OK'));
+const serveHeading = (req, res) => getHeading(client).then(head => res.json(head));
 
-const deleteItem = (req, res) =>
-  client.hdel('tasks', `${req.body.id}`, () => res.send('OK'));
+const resetHeading = (req, res) => setHeading(client, DEFAULT).then(status => res.json(status));
 
-const editHeading = (req, res) =>
-  client.set('heading', req.body.heading, () => res.send('OK'));
+const editHeading = (req, res) => setHeading(client, req.body.heading).then(status => res.json(status));
 
 module.exports = {
   hasFields,
