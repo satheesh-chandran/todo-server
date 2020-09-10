@@ -1,10 +1,10 @@
 const getId = function (client) {
   return new Promise((resolve, reject) => {
-    client.incr('curr_id', (err, res) => {
+    client.incr('curr_id', (err, id) => {
       if (err) {
         reject(err);
       }
-      resolve(res);
+      resolve(id);
     });
   });
 };
@@ -15,7 +15,7 @@ const getAllTasks = function (client) {
       if (err) {
         reject(err);
       }
-      const taskList = tasks ? tasks.map(task => JSON.parse(task)) : [];
+      const taskList = tasks ? tasks.map(JSON.parse) : [];
       resolve(taskList);
     });
   });
@@ -32,4 +32,16 @@ const getTask = function (client, id) {
   });
 };
 
-module.exports = { getId, getAllTasks, getTask };
+const getHeading = function (client) {
+  return new Promise((resolve, reject) => {
+    client.get('heading', (err, heading) => {
+      if (err) {
+        reject(err);
+      }
+      const head = heading ? { heading } : { heading: 'TODO' };
+      resolve(head);
+    });
+  });
+};
+
+module.exports = { getId, getAllTasks, getTask, getHeading };

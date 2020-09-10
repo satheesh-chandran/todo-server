@@ -5,13 +5,15 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "export PORT=8000; node server.js",
+    "dev": "export PORT=8000; nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "morgan": "^1.10.0",
     "redis": "^3.0.2"
   }
 }

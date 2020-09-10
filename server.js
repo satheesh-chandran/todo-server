@@ -1,10 +1,5 @@
-const redis = require('redis');
-const { stdout, env } = process;
 const app = require('./source/routes');
-const client = redis.createClient({ db: 1 });
-const PORT = env.PORT || 8000;
-const DEFAULT = 'TODO';
+const { stdout, env } = process;
+const { PORT } = env;
 
-client.set('heading', DEFAULT, () => {
-  app.listen(PORT, () => stdout.write(`listening on port ${PORT}...\n`));
-});
+app.listen(PORT, () => stdout.write(`listening on port ${PORT || 8000}...\n`));
