@@ -16,7 +16,7 @@ const {
 
 app.use(express.json());
 app.use(morgan('tiny'));
-app.use(express.static('public'));
+app.use(express.static('build'));
 
 app.get('/api/heading', serveHeading);
 app.get('/api/clearItems', clearItems);
